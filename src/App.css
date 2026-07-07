@@ -1,0 +1,83 @@
+.transactions {
+  width: 80%;
+  max-width: 700px;
+  margin: 30px auto;
+  padding: 20px;
+  background: white;
+  border-radius: 15px;
+  box-shadow: 0 5px 12px rgba(0,0,0,0.1);
+}
+
+.transactions h2 {
+  margin-bottom: 20px;
+}
+
+.transaction {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 0;
+  border-bottom: 1px solid #ddd;
+}
+
+.transaction:last-child {
+  border-bottom: none;
+}
+.expense-form {
+  width: 80%;
+  max-width: 500px;
+  margin: 30px auto;
+  padding: 20px;
+  background: white;
+  border-radius: 15px;
+  box-shadow: 0 5px 12px rgba(0,0,0,0.1);
+}
+
+.expense-form h2 {
+  margin-bottom: 20px;
+}
+
+.expense-form input,
+.expense-form select {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 15px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 16px;
+  box-sizing: border-box;
+}
+
+.expense-form button {
+  width: 100%;
+  padding: 12px;
+  background: #2563eb;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.expense-form button:hover {
+  background: #1d4ed8;
+}
+.ai-card {
+  width: 80%;
+  max-width: 700px;
+  margin: 30px auto;
+  padding: 20px;
+  border-radius: 15px;
+  background: #f8f9ff;
+  border-left: 6px solid #2563eb;
+  box-shadow: 0 5px 12px rgba(0,0,0,0.1);
+}
+
+.ai-card h2 {
+  margin-bottom: 15px;
+}
+
+.ai-card p {
+  font-size: 17px;
+  line-height: 1.6;
+}

@@ -1,0 +1,28 @@
+import "../styles/Navbar.css";
+.navbar{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:20px 60px;
+    background:#2563eb;
+}
+
+.navbar h2{
+    color:white;
+    margin:0;
+}
+
+.login-btn{
+    background:white;
+    color:#2563eb;
+    border:none;
+    padding:10px 22px;
+    border-radius:8px;
+    font-size:16px;
+    cursor:pointer;
+    font-weight:600;
+}
+
+.login-btn:hover{
+    background:#f3f4f6;
+}
