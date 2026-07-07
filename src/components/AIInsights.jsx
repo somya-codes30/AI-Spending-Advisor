@@ -1,31 +1,103 @@
 function AIInsights({ transactions }) {
+  // Calculate Income
+  const income = transactions
+    .filter((item) => item.type === "income")
+    .reduce((sum, item) => sum + item.amount, 0);
 
-  const totalExpenses = transactions
+  // Calculate Expenses
+  const expenses = transactions
     .filter((item) => item.type === "expense")
     .reduce((sum, item) => sum + item.amount, 0);
 
-  let message = "";
+  // Calculate Savings
+  const savings = income - expenses;
 
-  if (totalExpenses > 5000) {
-    message =
-      "⚠️ Your expenses are quite high this month. Try reducing unnecessary spending.";
-  } else if (totalExpenses > 2000) {
-    message =
-      "🙂 Your spending is moderate. Keep tracking your expenses.";
+  // Calculate Savings Rate
+  const savingsRate =
+    income > 0 ? ((savings / income) * 100).toFixed(1) : 0;
+
+  // Find Highest Expense
+  const expenseTransactions = transactions.filter(
+    (item) => item.type === "expense"
+  );
+
+  let highestExpense = null;
+
+  if (expenseTransactions.length > 0) {
+    highestExpense = expenseTransactions.reduce((max, item) =>
+      item.amount > max.amount ? item : max
+    );
+  }
+
+  // AI Tips
+  const tips = [];
+
+  if (savingsRate >= 50) {
+    tips.push("✅ Excellent! You are saving more than 50% of your income.");
+  }
+
+  if (expenses < 5000) {
+    tips.push("🎉 Your spending is well under control.");
+  }
+
+  if (expenses > income * 0.7) {
+    tips.push("⚠️ Your expenses are very high compared to your income.");
+  }
+
+  // Predicted Savings
+  const predictedSavings = savings;
+
+  let savingLevel = "";
+
+  if (predictedSavings >= 50000) {
+    savingLevel = "⭐⭐ Excellent Saving Habit";
+  } else if (predictedSavings >= 20000) {
+    savingLevel = "⭐ Good Saving Habit";
   } else {
-    message =
-      "🎉 Great job! Your expenses are well under control.";
+    savingLevel = "⚠️ Try to save more each month";
   }
 
   return (
     <div className="ai-card">
-      <h2>🤖 AI Spending Insights</h2>
+      <h2>🤖 AI Spending Advisor</h2>
 
-      <p>{message}</p>
+      <h3>📊 Financial Summary</h3>
 
-      <h3>Total Expenses</h3>
+      <p>💰 Income: ₹{income}</p>
 
-      <h2>₹{totalExpenses}</h2>
+      <p>💸 Expenses: ₹{expenses}</p>
+
+      <p>🏦 Savings: ₹{savings}</p>
+
+      <p>📈 Savings Rate: {savingsRate}%</p>
+
+      <hr />
+
+      <h3>💡 AI Recommendations</h3>
+
+      {highestExpense && (
+        <p>
+          📌 Biggest Expense:
+          <strong> {highestExpense.name}</strong> (₹
+          {highestExpense.amount})
+        </p>
+      )}
+
+      {tips.map((tip, index) => (
+        <p key={index}>{tip}</p>
+      ))}
+
+      <hr />
+
+      <h3>🎯 Predicted Monthly Savings</h3>
+
+      <p>
+        At your current spending, you can save approximately:
+      </p>
+
+      <h2>₹{predictedSavings}/month</h2>
+
+      <p>{savingLevel}</p>
     </div>
   );
 }
