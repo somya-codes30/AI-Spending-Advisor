@@ -7,6 +7,8 @@ import BalanceCard from "./components/BalanceCard";
 import TransactionList from "./components/TransactionList";
 import AddExpense from "./components/AddExpense";
 import AIInsights from "./components/AIInsights";
+import AIChat from "./components/AIChat";
+import SavingsGoal from "./components/SavingsGoal";
 
 function App() {
   const [transactions, setTransactions] = useState(() => {
@@ -80,6 +82,8 @@ function App() {
       <AddExpense addTransaction={addTransaction} />
 
       <AIInsights transactions={transactions} />
+      <AIChat transactions={transactions} />
+      <SavingsGoal balance={balance} />
     </>
   );
 }
