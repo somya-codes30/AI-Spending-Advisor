@@ -3,6 +3,7 @@ import { useState } from "react";
 function AddExpense({ addTransaction }) {
   const [name, setName] = useState("");
   const [amount, setAmount] = useState("");
+  const [category, setCategory] = useState("Food");
 
   const handleAddExpense = () => {
     // Prevent empty inputs
@@ -12,10 +13,11 @@ function AddExpense({ addTransaction }) {
     }
 
     const newExpense = {
-      name: name,
-      amount: Number(amount),
-      type: "expense",
-    };
+  name: name,
+  amount: Number(amount),
+  category: category,
+  type: "expense",
+};
 
     addTransaction(newExpense);
 
@@ -34,7 +36,17 @@ function AddExpense({ addTransaction }) {
         value={name}
         onChange={(e) => setName(e.target.value)}
       />
-
+<select
+  value={category}
+  onChange={(e) => setCategory(e.target.value)}
+>
+  <option>Food</option>
+  <option>Travel</option>
+  <option>Shopping</option>
+  <option>Entertainment</option>
+  <option>Bills</option>
+  <option>Others</option>
+</select>
       <input
         type="number"
         placeholder="Amount"

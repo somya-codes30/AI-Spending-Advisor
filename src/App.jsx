@@ -1,4 +1,6 @@
+
 import { useState, useEffect } from "react";
+import ThemeToggle from "./components/ThemeToggle";
 import "./App.css";
 
 import Navbar from "./components/Navbar";
@@ -9,11 +11,14 @@ import AddExpense from "./components/AddExpense";
 import AIInsights from "./components/AIInsights";
 import AIChat from "./components/AIChat";
 import SavingsGoal from "./components/SavingsGoal";
-
+import CategorySummary from "./components/CategorySummary";
+import CategoryPieChart from "./components/CategoryPieChart";
+import BudgetAlert from "./components/BudgetAlert";
 function App() {
+
   const [transactions, setTransactions] = useState(() => {
     const savedTransactions = localStorage.getItem("transactions");
-
+    
     return savedTransactions
       ? JSON.parse(savedTransactions)
       : [
@@ -34,7 +39,7 @@ function App() {
           },
         ];
   });
-
+const [darkMode, setDarkMode] = useState(true);
   const addTransaction = (newTransaction) => {
     setTransactions([...transactions, newTransaction]);
   };
@@ -63,7 +68,16 @@ function App() {
   }, [transactions]);
 
   return (
-    <>
+    <div
+  className={`app-container ${
+    darkMode ? "dark-theme" : "light-theme"
+  }`}
+>
+
+  <ThemeToggle
+  darkMode={darkMode}
+  setDarkMode={setDarkMode}
+/>
       <Navbar />
 
       <Hero />
@@ -82,9 +96,12 @@ function App() {
       <AddExpense addTransaction={addTransaction} />
 
       <AIInsights transactions={transactions} />
-      <AIChat transactions={transactions} />
       <SavingsGoal balance={balance} />
-    </>
+      <CategorySummary transactions={transactions} />
+      <CategoryPieChart transactions={transactions} />
+      <BudgetAlert expenses={expenses} />
+      <AIChat transactions={transactions} />
+    </div>
   );
 }
 

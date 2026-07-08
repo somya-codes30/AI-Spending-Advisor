@@ -1,120 +1,185 @@
-.transactions {
-  width: 80%;
-  max-width: 700px;
-  margin: 30px auto;
-  padding: 20px;
-  background: white;
-  border-radius: 15px;
-  box-shadow: 0 5px 12px rgba(0,0,0,0.1);
-}
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
 
-.transactions h2 {
-  margin-bottom: 20px;
-}
-
-.transaction {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 15px 0;
-  border-bottom: 1px solid #ddd;
-}
-
-.transaction:last-child {
-  border-bottom: none;
-}
-.expense-form {
-  width: 80%;
-  max-width: 500px;
-  margin: 30px auto;
-  padding: 20px;
-  background: white;
-  border-radius: 15px;
-  box-shadow: 0 5px 12px rgba(0,0,0,0.1);
-}
-
-.expense-form h2 {
-  margin-bottom: 20px;
-}
-
-.expense-form input,
-.expense-form select {
-  width: 100%;
-  padding: 12px;
-  margin-bottom: 15px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  font-size: 16px;
+* {
+  margin: 0;
+  padding: 0;
   box-sizing: border-box;
 }
 
-.expense-form button {
+body {
+  font-family: "Poppins", sans-serif;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+/* Main container */
+.app-container {
+  min-height: 100vh;
   width: 100%;
-  padding: 12px;
-  background: #2563eb;
+  padding: 30px;
+  transition: all 0.4s ease;
+}
+
+/* Themes */
+.dark-theme {
+  background: linear-gradient(135deg, #000000, #121212, #1f1f1f);
   color: white;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 16px;
 }
 
-.expense-form button:hover {
-  background: #1d4ed8;
+.light-theme {
+  background: linear-gradient(135deg, #f5f7fa, #e8edf5, #ffffff);
+  color: #222;
 }
-.ai-card {
-  width: 80%;
-  max-width: 700px;
-  margin: 30px auto;
-  padding: 20px;
+
+/* Headings */
+.dark-theme h1,
+.dark-theme h2,
+.dark-theme h3,
+.dark-theme p {
+  color: white;
+}
+
+.light-theme h1,
+.light-theme h2,
+.light-theme h3,
+.light-theme p {
+  color: #222;
+}
+
+/* Cards */
+.ai-card,
+.balance-card,
+.goal-card,
+.expense-card {
+  width: 100%;
+  max-width: 900px;
+  margin: 20px auto;
+  padding: 25px;
+  border-radius: 25px;
+  transition: 0.3s;
+}
+
+.dark-theme .ai-card,
+.dark-theme .balance-card,
+.dark-theme .goal-card,
+.dark-theme .expense-card {
+  background: rgba(20, 20, 20, 0.8);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.light-theme .ai-card,
+.light-theme .balance-card,
+.light-theme .goal-card,
+.light-theme .expense-card {
+  background: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+}
+
+/* Inputs */
+input,
+select,
+textarea {
+  width: 100%;
+  padding: 14px;
+  margin: 10px 0;
   border-radius: 15px;
-  background: #f8f9ff;
-  border-left: 6px solid #2563eb;
-  box-shadow: 0 5px 12px rgba(0,0,0,0.1);
+  font-size: 16px;
+  outline: none;
 }
 
-.ai-card h2 {
+.dark-theme input,
+.dark-theme textarea,
+.dark-theme select {
+  background: #111;
+  border: 1px solid #333;
+  color: white;
+}
+
+.light-theme input,
+.light-theme textarea,
+.light-theme select {
+  background: #f4f6f8;
+  border: 1px solid #ddd;
+  color: #222;
+}
+
+/* Buttons */
+button {
+  border: none;
+  border-radius: 30px;
+  padding: 12px 24px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.dark-theme button {
+  background: linear-gradient(90deg, #00c6ff, #0072ff);
+  color: white;
+}
+
+.light-theme button {
+  background: linear-gradient(90deg, #0072ff, #00c6ff);
+  color: white;
+}
+
+button:hover {
+  transform: translateY(-2px);
+}
+
+/* Theme Button */
+.theme-btn {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 1000;
+  width: auto;
+  padding: 12px 16px;
+  border-radius: 50%;
+}
+
+/* Hero */
+.hero {
+  text-align: center;
+  padding: 40px 20px;
+}
+
+.hero h1 {
+  font-size: 2.7rem;
   margin-bottom: 15px;
 }
 
-.ai-card p {
-  font-size: 17px;
-  line-height: 1.6;
-}
-textarea {
-  width: 100%;
-  padding: 12px;
-  margin-top: 10px;
-  border-radius: 8px;
-  border: 1px solid #ccc;
-  resize: none;
-  font-size: 16px;
+.hero p {
+  font-size: 1.1rem;
 }
 
-.ai-card button {
-  margin-top: 15px;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 8px;
-  background: #2563eb;
-  color: white;
-  cursor: pointer;
+/* Transaction Items */
+.transaction-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px;
+  border-radius: 15px;
+  margin-bottom: 12px;
 }
 
-.ai-card button:hover {
-  background: #1d4ed8;
-}
-.progress-bar {
-  width: 100%;
-  height: 20px;
-  background: #ddd;
-  border-radius: 10px;
-  overflow: hidden;
-  margin-top: 15px;
+.dark-theme .transaction-item {
+  background: rgba(255, 255, 255, 0.05);
 }
 
-.progress-fill {
-  height: 100%;
-  background: #2563eb;
-  transition: 0.5s;
+.light-theme .transaction-item {
+  background: #f5f5f5;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .app-container {
+    padding: 15px;
+  }
+
+  .hero h1 {
+    font-size: 2rem;
+  }
 }
