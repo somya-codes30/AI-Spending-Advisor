@@ -1,28 +1,74 @@
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 
-.navbar{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    padding:20px 60px;
-    background:#2563eb;
+  padding: 20px 30px;
+  margin-bottom: 30px;
+
+  border-radius: 25px;
+
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
 }
 
-.navbar h2{
-    color:white;
-    margin:0;
+.navbar h2 {
+  margin: 0;
+  font-size: 1.8rem;
+  font-weight: 700;
+  letter-spacing: 1px;
 }
 
-.login-btn{
-    background:white;
-    color:#2563eb;
-    border:none;
-    padding:10px 22px;
-    border-radius:8px;
-    font-size:16px;
-    cursor:pointer;
-    font-weight:600;
+.login-btn {
+  padding: 12px 24px;
+  border: none;
+  border-radius: 25px;
+
+  background: linear-gradient(
+    90deg,
+    #6a11cb,
+    #2575fc
+  );
+
+  color: white;
+  font-size: 1rem;
+  font-weight: 600;
+
+  cursor: pointer;
+  transition: all 0.3s ease;
 }
 
-.login-btn:hover{
-    background:#f3f4f6;
+.login-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(
+    37,
+    117,
+    252,
+    0.4
+  );
+}
+
+.login-btn:active {
+  transform: scale(0.96);
+}
+
+@media (max-width: 768px) {
+  .navbar {
+    flex-direction: column;
+    gap: 15px;
+    text-align: center;
+    padding: 20px;
+  }
+
+  .navbar h2 {
+    font-size: 1.5rem;
+  }
+
+  .login-btn {
+    width: 100%;
+    max-width: 200px;
+  }
 }

@@ -1,7 +1,11 @@
-
 import { useState, useEffect } from "react";
-import ThemeToggle from "./components/ThemeToggle";
 import "./App.css";
+import {
+  FaWallet,
+  FaArrowUp,
+  FaArrowDown,
+  FaPiggyBank,
+} from "react-icons/fa";
 
 import Navbar from "./components/Navbar";
 import Hero from "./components/Hero";
@@ -14,11 +18,13 @@ import SavingsGoal from "./components/SavingsGoal";
 import CategorySummary from "./components/CategorySummary";
 import CategoryPieChart from "./components/CategoryPieChart";
 import BudgetAlert from "./components/BudgetAlert";
-function App() {
+import ThemeToggle from "./components/ThemeToggle";
 
+function App() {
+  // Transactions
   const [transactions, setTransactions] = useState(() => {
     const savedTransactions = localStorage.getItem("transactions");
-    
+
     return savedTransactions
       ? JSON.parse(savedTransactions)
       : [
@@ -26,11 +32,13 @@ function App() {
             name: "Food",
             amount: 500,
             type: "expense",
+            category: "Food",
           },
           {
             name: "Travel",
             amount: 250,
             type: "expense",
+            category: "Travel",
           },
           {
             name: "Salary",
@@ -39,27 +47,16 @@ function App() {
           },
         ];
   });
-const [darkMode, setDarkMode] = useState(true);
-  const addTransaction = (newTransaction) => {
-    setTransactions([...transactions, newTransaction]);
-  };
 
-  const deleteTransaction = (indexToDelete) => {
-    setTransactions(
-      transactions.filter((_, index) => index !== indexToDelete)
-    );
-  };
+  // Theme
+  const [darkMode, setDarkMode] = useState(true);
 
-  const income = transactions
-    .filter((item) => item.type === "income")
-    .reduce((total, item) => total + item.amount, 0);
+  // User name
+  const [userName, setUserName] = useState(
+    localStorage.getItem("userName") || ""
+  );
 
-  const expenses = transactions
-    .filter((item) => item.type === "expense")
-    .reduce((total, item) => total + item.amount, 0);
-
-  const balance = income - expenses;
-
+  // Save transactions
   useEffect(() => {
     localStorage.setItem(
       "transactions",
@@ -67,42 +64,138 @@ const [darkMode, setDarkMode] = useState(true);
     );
   }, [transactions]);
 
-  return (
-    <div
-  className={`app-container ${
-    darkMode ? "dark-theme" : "light-theme"
-  }`}
->
+  // Save user name
+  const saveName = () => {
+    if (userName.trim() !== "") {
+      localStorage.setItem("userName", userName);
+      window.location.reload();
+    }
+  };
+  const changeUser = () => {
+  localStorage.removeItem("userName");
+  window.location.reload();
+};
 
-  <ThemeToggle
-  darkMode={darkMode}
-  setDarkMode={setDarkMode}
-/>
-      <Navbar />
+  // Add transaction
+  const addTransaction = (newTransaction) => {
+    setTransactions([
+      ...transactions,
+      newTransaction,
+    ]);
+  };
 
-      <Hero />
+  // Delete transaction
+  const deleteTransaction = (indexToDelete) => {
+    setTransactions(
+      transactions.filter(
+        (_, index) => index !== indexToDelete
+      )
+    );
+  };
 
+  // Calculations
+  const income = transactions
+    .filter((item) => item.type === "income")
+    .reduce(
+      (total, item) => total + item.amount,
+      0
+    );
+
+  const expenses = transactions
+    .filter((item) => item.type === "expense")
+    .reduce(
+      (total, item) => total + item.amount,
+      0
+    );
+
+  const balance = income - expenses;
+
+ return (
+  <div
+    className={`app-container ${
+      darkMode ? "dark-theme" : "light-theme"
+    }`}
+  >
+    <ThemeToggle
+      darkMode={darkMode}
+      setDarkMode={setDarkMode}
+    />
+
+    <button
+      className="change-user-btn"
+      onClick={changeUser}
+    >
+      👤 Change User
+    </button>
+
+    {/* Ask Name Only Once */}
+    {!localStorage.getItem("userName") && (
+      <div className="ai-card">
+        <h2>Welcome 👋</h2>
+
+        <input
+          type="text"
+          placeholder="Enter your name"
+          value={userName}
+          onChange={(e) =>
+            setUserName(e.target.value)
+          }
+        />
+
+        <button onClick={saveName}>
+          Continue
+        </button>
+      </div>
+    )}
+
+    <Navbar />
+
+    <Hero userName={userName} />
+
+    {/* Dashboard Cards */}
+    <div className="dashboard-grid">
       <BalanceCard
         balance={balance}
         income={income}
         expenses={expenses}
       />
 
-      <TransactionList
+      <SavingsGoal balance={balance} />
+
+      <BudgetAlert expenses={expenses} />
+
+      <CategorySummary
         transactions={transactions}
-        deleteTransaction={deleteTransaction}
+      />
+    </div>
+
+    {/* Add Expense Form */}
+    <AddExpense
+      addTransaction={addTransaction}
+    />
+
+    {/* Transactions */}
+    <TransactionList
+      transactions={transactions}
+      deleteTransaction={deleteTransaction}
+    />
+
+    {/* Analytics Section */}
+    <div className="analytics-grid">
+      <CategoryPieChart
+        transactions={transactions}
       />
 
-      <AddExpense addTransaction={addTransaction} />
-
-      <AIInsights transactions={transactions} />
-      <SavingsGoal balance={balance} />
-      <CategorySummary transactions={transactions} />
-      <CategoryPieChart transactions={transactions} />
-      <BudgetAlert expenses={expenses} />
-      <AIChat transactions={transactions} />
+      <AIInsights
+        transactions={transactions}
+      />
     </div>
-  );
-}
 
+    {/* AI Assistant */}
+    <AIChat
+      transactions={transactions}
+    />
+  </div>
+);
+}
 export default App;

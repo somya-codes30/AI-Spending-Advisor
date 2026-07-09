@@ -6,7 +6,7 @@ function Navbar() {
       <h2>AI Spending Advisor</h2>
 
       <button className="login-btn">
-        Login
+        👤 Login
       </button>
     </nav>
   );
