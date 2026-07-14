@@ -1,0 +1,81 @@
+.transactions {
+  padding: 30px;
+  border-radius: 25px;
+  margin-top: 20px;
+  transition: 0.3s;
+}
+
+.dark-theme .transactions {
+  background: #111827;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+}
+
+.light-theme .transactions {
+  background: white;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.transactions h2 {
+  text-align: center;
+  margin-bottom: 30px;
+  font-size: 28px;
+}
+
+.dark-theme .transactions h2 {
+  color: white;
+}
+
+.light-theme .transactions h2 {
+  color: #111827;
+}
+
+.transaction {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 25px;
+  border-radius: 20px;
+  margin-bottom: 20px;
+  transition: 0.3s;
+}
+
+.transaction:hover {
+  transform: translateY(-5px);
+}
+
+.dark-theme .transaction {
+  background: #1f2937;
+  color: white;
+}
+
+.light-theme .transaction {
+  background: #f4f7fc;
+  color: #111827;
+}
+
+.transaction span {
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.transaction button {
+  width: 45px;
+  height: 45px;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+
+  background: linear-gradient(
+    90deg,
+    #00c6ff,
+    #0072ff
+  );
+
+  color: white;
+  font-size: 18px;
+  transition: 0.3s;
+}
+
+.transaction button:hover {
+  transform: scale(1.1);
+}

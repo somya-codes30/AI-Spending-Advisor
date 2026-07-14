@@ -1,3 +1,4 @@
+import "../styles/TransactionList.css";
 function TransactionList({ transactions, deleteTransaction }) {
   return (
     <div className="transactions">

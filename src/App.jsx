@@ -19,7 +19,11 @@ import CategorySummary from "./components/CategorySummary";
 import CategoryPieChart from "./components/CategoryPieChart";
 import BudgetAlert from "./components/BudgetAlert";
 import ThemeToggle from "./components/ThemeToggle";
-
+import ExpenseTrendChart from "./components/ExpenseTrendChart";
+import Sidebar from "./components/Sidebar";
+import QuickActions from "./components/QuickActions";
+import FinancialScore from "./components/FinancialScore";
+import DashboardHeader from "./components/DashboardHeader";
 function App() {
   // Transactions
   const [transactions, setTransactions] = useState(() => {
@@ -111,77 +115,56 @@ function App() {
   const balance = income - expenses;
 
  return (
+  <div className="main-layout">
+  <Sidebar />
+
   <div
     className={`app-container ${
       darkMode ? "dark-theme" : "light-theme"
     }`}
   >
-    <ThemeToggle
-      darkMode={darkMode}
-      setDarkMode={setDarkMode}
-    />
+    <div className="top-bar">
+      <ThemeToggle
+        darkMode={darkMode}
+        setDarkMode={setDarkMode}
+      />
 
-    <button
-      className="change-user-btn"
-      onClick={changeUser}
-    >
-      👤 Change User
-    </button>
-
-    {/* Ask Name Only Once */}
-    {!localStorage.getItem("userName") && (
-      <div className="ai-card">
-        <h2>Welcome 👋</h2>
-
-        <input
-          type="text"
-          placeholder="Enter your name"
-          value={userName}
-          onChange={(e) =>
-            setUserName(e.target.value)
-          }
-        />
-
-        <button onClick={saveName}>
-          Continue
-        </button>
-      </div>
-    )}
-
-    <Navbar />
+      <button onClick={changeUser}>
+        👤 Change User
+      </button>
+    </div>
 
     <Hero userName={userName} />
 
-    {/* Dashboard Cards */}
-    <div className="dashboard-grid">
+    <div className="stats-grid">
       <BalanceCard
         balance={balance}
         income={income}
         expenses={expenses}
       />
 
+      <FinancialScore
+        income={income}
+        expenses={expenses}
+      />
+
       <SavingsGoal balance={balance} />
 
-      <BudgetAlert expenses={expenses} />
+      <QuickActions />
+    </div>
 
-      <CategorySummary
+    <div className="middle-grid">
+      <AddExpense
+        addTransaction={addTransaction}
+      />
+
+      <TransactionList
         transactions={transactions}
+        deleteTransaction={deleteTransaction}
       />
     </div>
 
-    {/* Add Expense Form */}
-    <AddExpense
-      addTransaction={addTransaction}
-    />
-
-    {/* Transactions */}
-    <TransactionList
-      transactions={transactions}
-      deleteTransaction={deleteTransaction}
-    />
-
-    {/* Analytics Section */}
-    <div className="analytics-grid">
+    <div className="bottom-grid">
       <CategoryPieChart
         transactions={transactions}
       />
@@ -191,11 +174,9 @@ function App() {
       />
     </div>
 
-    {/* AI Assistant */}
-    <AIChat
-      transactions={transactions}
-    />
+    <AIChat transactions={transactions} />
   </div>
+</div>
 );
 }
 export default App;
