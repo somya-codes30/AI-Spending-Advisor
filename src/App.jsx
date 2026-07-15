@@ -1,87 +1,89 @@
 import { useState, useEffect } from "react";
 import "./App.css";
-import {
-  FaWallet,
-  FaArrowUp,
-  FaArrowDown,
-  FaPiggyBank,
-} from "react-icons/fa";
 
-import Navbar from "./components/Navbar";
-import Hero from "./components/Hero";
-import BalanceCard from "./components/BalanceCard";
 import TransactionList from "./components/TransactionList";
 import AddExpense from "./components/AddExpense";
 import AIInsights from "./components/AIInsights";
 import AIChat from "./components/AIChat";
 import SavingsGoal from "./components/SavingsGoal";
-import CategorySummary from "./components/CategorySummary";
 import CategoryPieChart from "./components/CategoryPieChart";
-import BudgetAlert from "./components/BudgetAlert";
 import ThemeToggle from "./components/ThemeToggle";
-import ExpenseTrendChart from "./components/ExpenseTrendChart";
 import Sidebar from "./components/Sidebar";
 import QuickActions from "./components/QuickActions";
 import FinancialScore from "./components/FinancialScore";
 import DashboardHeader from "./components/DashboardHeader";
+import StatsCards from "./components/StatsCards";
+
 function App() {
   // Transactions
-  const [transactions, setTransactions] = useState(() => {
-    const savedTransactions = localStorage.getItem("transactions");
-
-    return savedTransactions
-      ? JSON.parse(savedTransactions)
-      : [
-          {
-            name: "Food",
-            amount: 500,
-            type: "expense",
-            category: "Food",
-          },
-          {
-            name: "Travel",
-            amount: 250,
-            type: "expense",
-            category: "Travel",
-          },
-          {
-            name: "Salary",
-            amount: 70000,
-            type: "income",
-          },
-        ];
-  });
+  const [transactions, setTransactions] =
+  useState([]);
 
   // Theme
-  const [darkMode, setDarkMode] = useState(true);
+  const [darkMode, setDarkMode] =
+    useState(true);
 
-  // User name
-  const [userName, setUserName] = useState(
-    localStorage.getItem("userName") || ""
-  );
+  // User
+  const [userName, setUserName] =
+    useState(
+      localStorage.getItem("userName") || ""
+    );
+
+  const [inputName, setInputName] =
+    useState("");
+
+  const saveName = () => {
+    if (!inputName.trim()) return;
+
+    localStorage.setItem(
+      "userName",
+      inputName
+    );
+
+    setUserName(inputName);
+    setInputName("");
+  };
+
+  const changeUser = () => {
+    localStorage.removeItem("userName");
+    setUserName("");
+    setInputName("");
+  };
 
   // Save transactions
-  useEffect(() => {
+ useEffect(() => {
+  if (userName) {
     localStorage.setItem(
-      "transactions",
+      `transactions_${userName}`,
       JSON.stringify(transactions)
     );
-  }, [transactions]);
+  }
+}, [transactions, userName]);
+useEffect(() => {
+  if (!userName) return;
 
-  // Save user name
-  const saveName = () => {
-    if (userName.trim() !== "") {
-      localStorage.setItem("userName", userName);
-      window.location.reload();
-    }
-  };
-  const changeUser = () => {
-  localStorage.removeItem("userName");
-  window.location.reload();
-};
+  const saved =
+    localStorage.getItem(
+      `transactions_${userName}`
+    );
+
+  if (saved) {
+    setTransactions(JSON.parse(saved));
+  } else {
+    setTransactions([
+      {
+        name: "Salary",
+        amount: 70000,
+        type: "income",
+      },
+    ]);
+  }
+}, [userName]);
 
   // Add transaction
-  const addTransaction = (newTransaction) => {
+  const addTransaction = (
+    newTransaction
+  ) => {
     setTransactions([
       ...transactions,
       newTransaction,
@@ -89,94 +91,159 @@ function App() {
   };
 
   // Delete transaction
-  const deleteTransaction = (indexToDelete) => {
+  const deleteTransaction = (
+    indexToDelete
+  ) => {
     setTransactions(
       transactions.filter(
-        (_, index) => index !== indexToDelete
+        (_, index) =>
+          index !== indexToDelete
       )
     );
   };
 
   // Calculations
   const income = transactions
-    .filter((item) => item.type === "income")
+    .filter(
+      (item) => item.type === "income"
+    )
     .reduce(
-      (total, item) => total + item.amount,
+      (total, item) =>
+        total + item.amount,
       0
     );
 
   const expenses = transactions
-    .filter((item) => item.type === "expense")
+    .filter(
+      (item) => item.type === "expense"
+    )
     .reduce(
-      (total, item) => total + item.amount,
+      (total, item) =>
+        total + item.amount,
       0
     );
 
   const balance = income - expenses;
 
- return (
-  <div className="main-layout">
-  <Sidebar />
+  return (
+    <div className="main-layout">
+      <Sidebar />
 
-  <div
-    className={`app-container ${
-      darkMode ? "dark-theme" : "light-theme"
-    }`}
-  >
-    <div className="top-bar">
-      <ThemeToggle
-        darkMode={darkMode}
-        setDarkMode={setDarkMode}
-      />
+      <div
+        className={`app-container ${
+          darkMode
+            ? "dark-theme"
+            : "light-theme"
+        }`}
+      >
+        <div className="top-bar">
+          <ThemeToggle
+            darkMode={darkMode}
+            setDarkMode={setDarkMode}
+          />
 
-      <button onClick={changeUser}>
-        👤 Change User
-      </button>
-    </div>
+          <button
+            onClick={changeUser}
+          >
+            👤 Change User
+          </button>
+        </div>
 
-    <Hero userName={userName} />
+        {!userName && (
+          <div className="ai-card">
+            <h2>Welcome 👋</h2>
 
-    <div className="stats-grid">
-      <BalanceCard
-        balance={balance}
-        income={income}
-        expenses={expenses}
-      />
+            <input
+              type="text"
+              placeholder="Enter your name"
+              value={inputName}
+              onChange={(e) =>
+                setInputName(
+                  e.target.value
+                )
+              }
+            />
 
-      <FinancialScore
-        income={income}
-        expenses={expenses}
-      />
+            <button
+              onClick={saveName}
+            >
+              Continue
+            </button>
+          </div>
+        )}
 
-      <SavingsGoal balance={balance} />
+        {userName && (
+          <>
+            <DashboardHeader
+              userName={userName}
+            />
 
-      <QuickActions />
-    </div>
+            <div className="stats-grid">
+              <StatsCards
+                balance={balance}
+                income={income}
+                expenses={expenses}
+              />
 
-    <div className="middle-grid">
-      <AddExpense
-        addTransaction={addTransaction}
-      />
+              <FinancialScore
+                income={income}
+                expenses={expenses}
+              />
 
-      <TransactionList
-        transactions={transactions}
-        deleteTransaction={deleteTransaction}
-      />
-    </div>
+              <SavingsGoal
+                balance={balance}
+              />
 
-    <div className="bottom-grid">
-      <CategoryPieChart
-        transactions={transactions}
-      />
+              <QuickActions />
+            </div>
 
-      <AIInsights
-        transactions={transactions}
-      />
-    </div>
-
-    <AIChat transactions={transactions} />
-  </div>
+            <div className="middle-grid">
+              <div className="expense-section">
+                <div className="expense-card">
+                  <div className="expense-card">
+  <AddExpense
+    addTransaction={addTransaction}
+  />
 </div>
-);
+                </div>
+
+                <div className="transaction-card">
+                  <TransactionList
+                    transactions={
+                      transactions
+                    }
+                    deleteTransaction={
+                      deleteTransaction
+                    }
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div className="bottom-grid">
+              <CategoryPieChart
+                transactions={
+                  transactions
+                }
+              />
+
+              <AIInsights
+                transactions={
+                  transactions
+                }
+              />
+            </div>
+
+            <AIChat
+              transactions={
+                transactions
+              }
+            />
+          </>
+        )}
+      </div>
+    </div>
+  );
 }
+
 export default App;

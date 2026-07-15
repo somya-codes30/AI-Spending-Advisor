@@ -7,7 +7,7 @@ function SavingsGoal({ balance }) {
   );
 
   return (
-    <div className="ai-card">
+  <div className="ai-card savings-goal">
       <h2>🎯 Savings Goal</h2>
 
       <p>

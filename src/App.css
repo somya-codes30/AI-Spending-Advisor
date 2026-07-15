@@ -195,3 +195,188 @@ select {
   opacity: 0.7;
   font-size: 1rem;
 }
+/* ===========================
+   DARK MODE TEXT COLORS
+=========================== */
+
+.dark-theme {
+  background: #0f172a;
+  color: #f8fafc;
+}
+
+/* Hero / Dashboard Header */
+
+.dark-theme .hero h1,
+.dark-theme .dashboard-header h1 {
+  color: #ffffff;
+  font-weight: 700;
+}
+
+.dark-theme .hero p,
+.dark-theme .dashboard-header p {
+  color: #cbd5e1;
+}
+
+/* Cards */
+
+.dark-theme .balance-card,
+.dark-theme .score-card,
+.dark-theme .goal-card,
+.dark-theme .transactions,
+.dark-theme .ai-card,
+.dark-theme .category-summary,
+.dark-theme .category-chart,
+.dark-theme .action-card {
+  background: #1e293b;
+  color: #ffffff;
+}
+
+/* Paragraphs inside cards */
+
+.dark-theme .balance-card p,
+.dark-theme .score-card p,
+.dark-theme .goal-card p,
+.dark-theme .transactions p,
+.dark-theme .ai-card p,
+.dark-theme .category-summary p,
+.dark-theme .category-chart p {
+  color: #cbd5e1;
+}
+
+/* Headings inside cards */
+
+.dark-theme h1,
+.dark-theme h2,
+.dark-theme h3,
+.dark-theme h4 {
+  color: #ffffff;
+}
+
+/* Inputs */
+
+.dark-theme input,
+.dark-theme select,
+.dark-theme textarea {
+  background: #334155;
+  color: white;
+  border: 1px solid #475569;
+}
+
+.dark-theme input::placeholder {
+  color: #94a3b8;
+}
+
+/* Sidebar */
+
+.dark-theme .sidebar {
+  background: #111827;
+}
+
+.dark-theme .sidebar li {
+  color: #e2e8f0;
+}
+
+.dark-theme .sidebar li:hover {
+  background: #4f46e5;
+}
+
+/* Transaction Cards */
+
+.dark-theme .transaction {
+  background: #334155;
+  color: white;
+}
+
+/* Buttons */
+
+.dark-theme button {
+  color: white;
+}
+
+/* Current Balance Number */
+
+.dark-theme .balance-card h1,
+.dark-theme .balance-card h2 {
+  color: #ffffff;
+}
+
+/* Financial Score */
+
+.dark-theme .score-card h1 {
+  color: #ffffff;
+}
+
+/* AI Chat */
+
+.dark-theme .ai-chat {
+  color: white;
+}
+.stats-cards {
+  display: grid;
+  grid-template-columns:
+      repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.stat-card {
+  padding: 25px;
+  border-radius: 25px;
+  text-align: center;
+  transition: 0.3s;
+}
+
+.dark-theme .stat-card {
+  background: #1e293b;
+}
+
+.light-theme .stat-card {
+  background: white;
+  box-shadow:
+      0 8px 25px rgba(0,0,0,0.08);
+}
+
+.stat-card:hover {
+  transform: translateY(-5px);
+}
+
+.stat-card h4 {
+  color: #94a3b8;
+  margin-bottom: 15px;
+}
+
+.stat-card h2 {
+  font-size: 2rem;
+}
+.expense-section {
+  display: grid;
+  grid-template-columns:
+    1fr 1.4fr;
+  gap: 25px;
+  margin-bottom: 30px;
+}
+
+.expense-card,
+.transaction-card {
+  border-radius: 30px;
+  padding: 25px;
+}
+
+.dark-theme .expense-card,
+.dark-theme .transaction-card {
+  background: #1e293b;
+}
+
+.light-theme .expense-card,
+.light-theme .transaction-card {
+  background: white;
+  box-shadow:
+    0 8px 25px rgba(0,0,0,0.08);
+}
+
+@media (max-width: 1000px) {
+  .expense-section {
+    grid-template-columns: 1fr;
+  }
+}
+
