@@ -13,11 +13,28 @@ import QuickActions from "./components/QuickActions";
 import FinancialScore from "./components/FinancialScore";
 import DashboardHeader from "./components/DashboardHeader";
 import StatsCards from "./components/StatsCards";
+import ExpenseTrendChart from "./components/ExpenseTrendChart";
+import MonthlyAnalytics from "./components/MonthlyAnalytics";
+import AddIncome from "./components/AddIncome";
 
 function App() {
   // Transactions
-  const [transactions, setTransactions] =
-  useState([]);
+  // Transactions
+const [transactions, setTransactions] =
+  useState(() => {
+    const savedTransactions =
+      localStorage.getItem("transactions");
+
+    return savedTransactions
+      ? JSON.parse(savedTransactions)
+      : [];
+  });
+  useEffect(() => {
+  localStorage.setItem(
+    "transactions",
+    JSON.stringify(transactions)
+  );
+}, [transactions]);
 
   // Theme
   const [darkMode, setDarkMode] =
@@ -28,7 +45,9 @@ function App() {
     useState(
       localStorage.getItem("userName") || ""
     );
-
+useEffect(() => {
+  localStorage.setItem("userName", userName);
+}, [userName]);
   const [inputName, setInputName] =
     useState("");
 
@@ -197,42 +216,48 @@ useEffect(() => {
               <QuickActions />
             </div>
 
-            <div className="middle-grid">
-              <div className="expense-section">
-                <div className="expense-card">
-                  <div className="expense-card">
-  <AddExpense
+            <div className="expense-section">
+<div className="expense-card">
+    <AddExpense
+      addTransaction={addTransaction}
+    />
+  </div>
+  <div className="expense-card income-card">
+  <AddIncome
     addTransaction={addTransaction}
   />
 </div>
-                </div>
 
-                <div className="transaction-card">
-                  <TransactionList
-                    transactions={
-                      transactions
-                    }
-                    deleteTransaction={
-                      deleteTransaction
-                    }
-                  />
-                </div>
-              </div>
-            </div>
+ 
+  <div className="transaction-card">
+    <TransactionList
+      transactions={transactions}
+      deleteTransaction={deleteTransaction}
+    />
+  </div>
+
+</div>
+
 
             <div className="bottom-grid">
-              <CategoryPieChart
-                transactions={
-                  transactions
-                }
-              />
+  <CategoryPieChart
+    transactions={transactions}
+  />
 
-              <AIInsights
-                transactions={
-                  transactions
-                }
-              />
-            </div>
+  <ExpenseTrendChart
+    transactions={transactions}
+  />
+
+  <MonthlyAnalytics
+    income={income}
+    expenses={expenses}
+    balance={balance}
+  />
+
+  <AIInsights
+    transactions={transactions}
+  />
+</div>
 
             <AIChat
               transactions={

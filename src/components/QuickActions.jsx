@@ -22,11 +22,18 @@ function QuickActions() {
 };
 
 const showIncome = () => {
-  alert(
-    "Income feature will be added from the Add Expense form for now."
-  );
-};
+  const incomeSection =
+    document.querySelector(".income-card");
 
+  if (incomeSection) {
+    incomeSection.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    });
+  } else {
+    alert("Income section not found!");
+  }
+};
   const showReport = () => {
   window.print();
 };
