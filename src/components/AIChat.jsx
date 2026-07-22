@@ -3,23 +3,28 @@ import { askGemini } from "../services/gemini";
 
 function AIChat({ transactions }) {
   const [message, setMessage] = useState("");
-const [chatHistory, setChatHistory] = useState(() => {
-  const savedChat = localStorage.getItem("chatHistory");
 
-  return savedChat ? JSON.parse(savedChat) : [];
-});
+  const [chatHistory, setChatHistory] = useState(() => {
+    const savedChat = localStorage.getItem("chatHistory");
+
+    return savedChat ? JSON.parse(savedChat) : [];
+  });
+
   const [loading, setLoading] = useState(false);
-useEffect(() => {
-  localStorage.setItem(
-    "chatHistory",
-    JSON.stringify(chatHistory)
-  );
-}, [chatHistory]);
+
+  // Save chat history
+  useEffect(() => {
+    localStorage.setItem(
+      "chatHistory",
+      JSON.stringify(chatHistory)
+    );
+  }, [chatHistory]);
+
+  // Ask AI
   const handleAskAI = async () => {
     if (!message.trim()) return;
 
     setLoading(true);
-   
 
     const prompt = `
 You are a helpful personal finance AI assistant.
@@ -43,60 +48,85 @@ Rules:
 
     const answer = await askGemini(prompt);
 
-setChatHistory((prev) => [
-  ...prev,
-  {
-    question: message,
-    answer: answer,
-  },
-]);
+    setChatHistory((prev) => [
+      ...prev,
+      {
+        question: message,
+        answer: answer,
+      },
+    ]);
 
-setMessage("");
-setLoading(false);
+    setMessage("");
+    setLoading(false);
   };
 
   return (
-    <div className="ai-card ai-chat">
-      <h2>💬 AI Financial Assistant</h2>
-<button
-  className="clear-chat-btn"
-  onClick={() => {
-    setChatHistory([]);
-    localStorage.removeItem("chatHistory");
-  }}
->
-  🗑️ Clear Chat
-</button>
+    <div className="ai-chat-card">
+
+      {/* Header */}
+      <h2>🤖 AI Spending Advisor</h2>
+
+      {/* Clear Chat */}
+      <button
+        className="clear-chat-btn"
+        onClick={() => {
+          setChatHistory([]);
+          localStorage.removeItem("chatHistory");
+        }}
+      >
+        🗑️ Clear Chat
+      </button>
+
+      {/* Description */}
       <p>
         Ask me anything about your spending and finances.
       </p>
-<div className="quick-questions">
-  <button
-    onClick={() => setMessage("Where am I spending the most?")}
-  >
-    📊 Where am I spending the most?
-  </button>
 
-  <button
-    onClick={() => setMessage("How can I save more money?")}
-  >
-    💰 How can I save more?
-  </button>
+      {/* Quick Questions */}
+      <div className="quick-questions">
 
-  <button
-    onClick={() =>
-      setMessage("Give me 3 tips to reduce my expenses.")
-    }
-  >
-    💡 Reduce my expenses
-  </button>
-</div>
+        <button
+          onClick={() =>
+            setMessage(
+              "Where am I spending the most?"
+            )
+          }
+        >
+          📊 Where am I spending the most?
+        </button>
+
+        <button
+          onClick={() =>
+            setMessage(
+              "How can I save more money?"
+            )
+          }
+        >
+          💰 How can I save more?
+        </button>
+
+        <button
+          onClick={() =>
+            setMessage(
+              "Give me 3 tips to reduce my expenses."
+            )
+          }
+        >
+          💡 Reduce my expenses
+        </button>
+
+      </div>
+
+      {/* Chat Input */}
       <div className="chat-input">
+
         <input
           type="text"
           placeholder="e.g. Where am I spending the most?"
           value={message}
-          onChange={(e) => setMessage(e.target.value)}
+          onChange={(e) =>
+            setMessage(e.target.value)
+          }
           onKeyDown={(e) => {
             if (e.key === "Enter") {
               handleAskAI();
@@ -108,32 +138,66 @@ setLoading(false);
           onClick={handleAskAI}
           disabled={loading}
         >
-          {loading ? "🤖 Thinking..." : "Ask AI"}
+          {loading
+            ? "🤖 Thinking..."
+            : "Ask AI"}
         </button>
+
       </div>
 
-     {chatHistory.length > 0 && (
-  <div className="chat-history">
-    {chatHistory.map((chat, index) => (
-      <div className="chat-message" key={index}>
-        
-        <div className="user-message">
-          <strong>👤 You:</strong>
-          <p>{chat.question}</p>
-        </div>
+      {/* Chat History */}
+      {chatHistory.length > 0 && (
+        <div className="chat-history">
 
-        <div className="ai-message">
-          <strong>🤖 AI:</strong>
+          {chatHistory.map(
+            (chat, index) => (
 
-          {chat.answer.split("\n").map((line, i) => (
-            <p key={i}>{line}</p>
-          ))}
-         </div>
+              <div
+                className="chat-message"
+                key={index}
+              >
 
-            </div>
-          ))}
+                {/* User Message */}
+                <div className="user-message">
+
+                  <strong>
+                    👤 You:
+                  </strong>
+
+                  <p>
+                    {chat.question}
+                  </p>
+
+                </div>
+
+
+                {/* AI Message */}
+                <div className="ai-message">
+
+                  <strong>
+                    🤖 AI:
+                  </strong>
+
+                  {chat.answer
+                    .split("\n")
+                    .map(
+                      (line, i) => (
+                        <p key={i}>
+                          {line}
+                        </p>
+                      )
+                    )}
+
+                </div>
+
+              </div>
+
+            )
+          )}
+
         </div>
       )}
+
     </div>
   );
 }

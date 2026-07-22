@@ -36,7 +36,7 @@ function CategoryPieChart({ transactions }) {
   ];
 
   return (
-    <div className="ai-card">
+    <div className="category-chart">
       <h2>📊 Expense Breakdown</h2>
 
       {data.length === 0 ? (

@@ -18,6 +18,8 @@ import MonthlyAnalytics from "./components/MonthlyAnalytics";
 import AddIncome from "./components/AddIncome";
 
 function App() {
+    const [activePage, setActivePage] =
+    useState("Dashboard");
   // Transactions
   // Transactions
 const [transactions, setTransactions] =
@@ -145,16 +147,15 @@ useEffect(() => {
   const balance = income - expenses;
 
   return (
-    <div className="main-layout">
-      <Sidebar />
+    <div className={`main-layout ${
+  darkMode ? "dark-theme" : "light-theme"
+}`}>
+  <Sidebar
+    activePage={activePage}
+    setActivePage={setActivePage}
+  />
 
-      <div
-        className={`app-container ${
-          darkMode
-            ? "dark-theme"
-            : "light-theme"
-        }`}
-      >
+  <div className="app-container">
         <div className="top-bar">
           <ThemeToggle
             darkMode={darkMode}
@@ -190,32 +191,33 @@ useEffect(() => {
             </button>
           </div>
         )}
+{userName &&
+  activePage === "Dashboard" && (
+    <>
+      <DashboardHeader
+        userName={userName}
+      />
 
-        {userName && (
-          <>
-            <DashboardHeader
-              userName={userName}
-            />
+          <div className="stats-grid">
+  <StatsCards
+    balance={balance}
+    income={income}
+    expenses={expenses}
+  />
+</div>
 
-            <div className="stats-grid">
-              <StatsCards
-                balance={balance}
-                income={income}
-                expenses={expenses}
-              />
+<div className="dashboard-middle-grid">
+  <FinancialScore
+    income={income}
+    expenses={expenses}
+  />
 
-              <FinancialScore
-                income={income}
-                expenses={expenses}
-              />
+  <SavingsGoal
+    balance={balance}
+  />
 
-              <SavingsGoal
-                balance={balance}
-              />
-
-              <QuickActions />
-            </div>
-
+  <QuickActions />
+</div>
             <div className="expense-section">
 <div className="expense-card">
     <AddExpense
@@ -266,6 +268,102 @@ useEffect(() => {
             />
           </>
         )}
+        {/* =========================
+    ANALYTICS PAGE
+========================= */}
+{userName &&
+  activePage === "Analytics" && (
+    <div className="page-section">
+
+      <h1>📊 Financial Analytics</h1>
+
+      <p>
+        Track your income, expenses,
+        and spending patterns.
+      </p>
+
+      <div className="stats-grid">
+        <StatsCards
+          balance={balance}
+          income={income}
+          expenses={expenses}
+        />
+      </div>
+
+      <div className="bottom-grid">
+
+        <CategoryPieChart
+          transactions={transactions}
+        />
+
+        <ExpenseTrendChart
+          transactions={transactions}
+        />
+
+        <MonthlyAnalytics
+          income={income}
+          expenses={expenses}
+          balance={balance}
+        />
+
+      </div>
+
+    </div>
+  )}
+  {/* =========================
+    AI ADVISOR PAGE
+========================= */}
+
+{userName &&
+  activePage === "AI Advisor" && (
+    <div className="page-section">
+
+      <h1>🤖 AI Spending Advisor</h1>
+
+      <p>
+        Get personalized financial advice based on your spending.
+      </p>
+
+      <AIInsights
+        transactions={transactions}
+      />
+
+      <AIChat
+        transactions={transactions}
+      />
+
+    </div>
+  )}
+  {/* =========================
+    SETTINGS PAGE
+========================= */}
+
+{userName &&
+  activePage === "Settings" && (
+    <div className="page-section">
+
+      <h1>⚙️ Settings</h1>
+
+      <p>
+        Manage your FinanceAI preferences.
+      </p>
+
+      <div className="settings-card">
+
+        <h2>👤 User Profile</h2>
+
+        <p>
+          Current User: <strong>{userName}</strong>
+        </p>
+
+        <button onClick={changeUser}>
+          🔄 Change User
+        </button>
+
+      </div>
+
+    </div>
+  )}
       </div>
     </div>
   );

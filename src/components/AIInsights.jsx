@@ -114,7 +114,7 @@ const transactionsChanged =
   lastAnalyzedTransactions &&
   lastAnalyzedTransactions !== currentTransactionSnapshot;
   return (
-    <div className="ai-card">
+    <div className="ai-card ai-insights-card">
       <h2>🤖 AI Spending Advisor</h2>
 
       <h3>📊 Financial Summary</h3>

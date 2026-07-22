@@ -7,7 +7,7 @@ function SavingsGoal({ balance }) {
   );
 
   return (
-  <div className="ai-card savings-goal">
+    <div className="savings-goal">
       <h2>🎯 Savings Goal</h2>
 
       <p>
@@ -15,8 +15,7 @@ function SavingsGoal({ balance }) {
       </p>
 
       <p>
-        Current Savings:
-        ₹{balance.toLocaleString()}
+        Current Savings: ₹{balance.toLocaleString()}
       </p>
 
       <p>
