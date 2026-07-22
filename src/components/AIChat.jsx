@@ -1,71 +1,138 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { askGemini } from "../services/gemini";
 
 function AIChat({ transactions }) {
-  const [question, setQuestion] = useState("");
-  const [answer, setAnswer] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState("");
+const [chatHistory, setChatHistory] = useState(() => {
+  const savedChat = localStorage.getItem("chatHistory");
 
+  return savedChat ? JSON.parse(savedChat) : [];
+});
+  const [loading, setLoading] = useState(false);
+useEffect(() => {
+  localStorage.setItem(
+    "chatHistory",
+    JSON.stringify(chatHistory)
+  );
+}, [chatHistory]);
   const handleAskAI = async () => {
-    if (question.trim() === "") {
-      alert("Please enter a question.");
-      return;
-    }
+    if (!message.trim()) return;
 
     setLoading(true);
+   
 
- const prompt = `
-You are an Indian financial advisor.
+    const prompt = `
+You are a helpful personal finance AI assistant.
 
-All amounts are in Indian Rupees (₹).
+Here are the user's financial transactions:
 
-User Financial Data:
-${JSON.stringify(transactions, null, 2)}
+${JSON.stringify(transactions)}
 
-User Question:
-${question}
+The user asks:
+"${message}"
 
-Based on the user's financial data:
+Answer the user's question based only on their transaction data.
 
-1. Give a short financial analysis.
-2. Mention the biggest expense.
-3. Suggest ways to save more money.
-4. Suggest whether the user should invest.
-5. Use ₹ instead of $.
-6. Do NOT use markdown symbols like **, ##, or bullet markdown.
-7. Keep the response short and easy to understand.
+Rules:
+- Give practical and personalized financial advice.
+- Use Indian Rupees (₹) for money.
+- Keep the answer simple and easy to understand.
+- If there is not enough transaction data, clearly mention that.
+- Do not make up financial information.
 `;
 
-    const response = await askGemini(prompt);
+    const answer = await askGemini(prompt);
 
-    setAnswer(response);
-    setLoading(false);
+setChatHistory((prev) => [
+  ...prev,
+  {
+    question: message,
+    answer: answer,
+  },
+]);
+
+setMessage("");
+setLoading(false);
   };
 
   return (
-    <div className="ai-card">
-      <h2>💬 Ask AI</h2>
+    <div className="ai-card ai-chat">
+      <h2>💬 AI Financial Assistant</h2>
+<button
+  className="clear-chat-btn"
+  onClick={() => {
+    setChatHistory([]);
+    localStorage.removeItem("chatHistory");
+  }}
+>
+  🗑️ Clear Chat
+</button>
+      <p>
+        Ask me anything about your spending and finances.
+      </p>
+<div className="quick-questions">
+  <button
+    onClick={() => setMessage("Where am I spending the most?")}
+  >
+    📊 Where am I spending the most?
+  </button>
 
-      <textarea
-        rows="4"
-        placeholder="Example: How can I save more money this month?"
-        value={question}
-        onChange={(e) => setQuestion(e.target.value)}
-      />
+  <button
+    onClick={() => setMessage("How can I save more money?")}
+  >
+    💰 How can I save more?
+  </button>
 
-      <br />
-      <br />
+  <button
+    onClick={() =>
+      setMessage("Give me 3 tips to reduce my expenses.")
+    }
+  >
+    💡 Reduce my expenses
+  </button>
+</div>
+      <div className="chat-input">
+        <input
+          type="text"
+          placeholder="e.g. Where am I spending the most?"
+          value={message}
+          onChange={(e) => setMessage(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              handleAskAI();
+            }
+          }}
+        />
 
-      <button onClick={handleAskAI}>
-        {loading ? "Thinking..." : "Ask AI"}
-      </button>
+        <button
+          onClick={handleAskAI}
+          disabled={loading}
+        >
+          {loading ? "🤖 Thinking..." : "Ask AI"}
+        </button>
+      </div>
 
-      {answer && (
-        <>
-          <hr />
-          <h3>🤖 AI Response</h3>
-          <p>{answer}</p>
-        </>
+     {chatHistory.length > 0 && (
+  <div className="chat-history">
+    {chatHistory.map((chat, index) => (
+      <div className="chat-message" key={index}>
+        
+        <div className="user-message">
+          <strong>👤 You:</strong>
+          <p>{chat.question}</p>
+        </div>
+
+        <div className="ai-message">
+          <strong>🤖 AI:</strong>
+
+          {chat.answer.split("\n").map((line, i) => (
+            <p key={i}>{line}</p>
+          ))}
+         </div>
+
+            </div>
+          ))}
+        </div>
       )}
     </div>
   );
